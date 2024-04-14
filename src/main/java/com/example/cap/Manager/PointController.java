@@ -1,10 +1,8 @@
-package com.example.cap.Support;
+package com.example.cap.Manager;
 
 import com.example.cap.Class.Point;
 import com.example.cap.Support.CsvLoader;
-import com.example.cap.controller.PointLoader;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,15 +17,33 @@ public class PointController {
         }
         return instance;
     }
-    
+
+    //1.포인트 입력시,
+    public String SearchPoint(Point StartPoint, Point EndPoint)
+    {
+        //1.포인트를 입력받아 정렬기에 넣어줌
+        var it = GetSortPoints();
+        //2.정렬된 포인트를 받은 뒤, 프론트에서 사용하기 쉽게 정리 후 반환
+        return ConvertPoint2API(it);
+    }
+
+    private List<Point> GetSortPoints()
+    {
+        return null;
+    }
+    private String ConvertPoint2API(List<Point> points)
+    {
+        return null;
+    }
+
     private PointController() {}
 
-    List<Point> pointList;
+    private List<Point> pointList;
 
-    public List<Point> LoadPoints()
+    private List<Point> LoadPoints()
     {
         List<Point> pointList = new ArrayList<Point>();
-        List<List<String>> csvList = CsvLoader.readCSV("");
+        List<List<String>> csvList = CsvLoader.readCSV("src/main/java/com/example/cap/DB/PointDB.csv");
 
         int id;
         int x;
