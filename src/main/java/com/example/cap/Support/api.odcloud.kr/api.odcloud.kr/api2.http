@@ -1,0 +1,73 @@
+## 장애인 편의시설 (도로시설물 현황) 재검토용 페이지
+//(왜냐면 얘는 이름 설정할떄 베이스 값으로 설정함)//
+GET https://api.odcloud.kr/api/15110478/v1/uddi:ac50edd2-7499-460d-b52b-bb3809e68503?page=1&perPage=10&
+    serviceKey=VKZ%2BE4KtSn5mw4VQls6l7DTiGDCkKP%2Bd042ELA6gECbbJV4YWsIiPg0WGj2fBsCVKWG26u4oJ1G3MpeioU%2BTMg%3D%3D
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            //요청을 보낼 URL
+            String url = "https://api.odcloud.kr/api/15110478/v1/uddi:ac50edd2-7499-460d-b52b-bb3809e68503?page=1&perPage=10&serviceKey=VKZ%2BE4KtSn5mw4VQls6l7DTiGDCkKP%2Bd042ELA6gECbbJV4YWsIiPg0WGj2fBsCVKWG26u4oJ1G3MpeioU%2BTMg%3D%3D";
+
+            // URL 객체 생성
+            URL obj = new URL(url);
+
+            // HTTP 연결 객체 생성
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            // 요청 방식 설정 (GET 방식)
+            con.setRequestMethod("GET");
+
+            // Header 추가
+            con.setRequestProperty("accept", "*/*");
+            con.setRequestProperty("Authorization", "*/*");
+
+            // 응답 코드 확인
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            // 응답 내용 읽기
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // 응답 내용 출력
+            System.out.println("Response Content: " + response.toString());
+
+            // CSV 파일 경로
+            String csvFile = "대전광역시_장애인편의시설(도로시설물) 현황_20221215.csv";
+            String line;
+            String cvsSplitBy = ","; // CSV 파일의 구분자 설정
+
+            // CSV 파일 읽기
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // CSV 라인을 쉼표를 기준으로 분리하여 배열로 저장
+                String[] data = line.split(cvsSplitBy);
+
+                // CSV 데이터 사용 예시
+                // 여기에 필요한 작업 수행
+                for (String value : data) {
+                    System.out.print(value + " ");
+                }
+                System.out.println(); // 줄 바꿈
+            }
+            br.close();
+
+            // 연결 종료
+            con.disconnect();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
