@@ -13,6 +13,7 @@ public class CapApplication {
         SpringApplication.run(CapApplication.class, args);
 
         System.out.println("API 키: " + MapController.AllowURL(key));
+        //hi
     }
 
 }
