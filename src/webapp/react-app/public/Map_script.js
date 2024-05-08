@@ -119,9 +119,9 @@ function initTmap() {
                                 });
 
                                 marker.addListener('click', function () {
-                                    poiDetail(poiId);
+                                    poiDetail(poiId); // poiDetail 함수에 poiId 전달하여 세부 정보 표시
                                 });
-
+                                
                                 innerHtml += "<li><span>" + (Number(k) + 1) + "</span><span>.  " + name + "</span></li>";
 
                                 markerArr.push(marker);
@@ -486,6 +486,7 @@ function initTmap() {
             });
         }
         
+        
 }  
 
 
@@ -502,4 +503,3 @@ function getCrimLevel(level) {
             return level;
     }
 }
-
