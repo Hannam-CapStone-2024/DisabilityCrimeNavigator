@@ -10,7 +10,7 @@ function initTmap() {
         zoomControl: true,
         scrollwheel: true
     });
-    
+
 
     // 2. 주소 입력 후 검색 버튼 클릭 이벤트
     $("#btn_select").click(function () {
@@ -149,6 +149,7 @@ function initTmap() {
         });
 
     });
+
 
         // 다중 마커 생성
         var positions = [
@@ -443,7 +444,6 @@ function initTmap() {
                 radius: 140
             }
         ];
-    
 
 
         for (var i = 0; i < positions.length; i++) {
@@ -459,13 +459,8 @@ function initTmap() {
             var marker = new Tmapv2.Marker({
                 position: lonlat,
                 map: map,
-                icon: {
-                    url: 'public/main/icon1.png',
-                    scaledSize: new Tmapv2.Size(40, 40) // 아이콘의 크기를 조정합니다.
-                },
-                label: title
             });
-        
+
             // 반경을 원으로 표시
             var circle = new Tmapv2.Circle({
                 center: lonlat,
