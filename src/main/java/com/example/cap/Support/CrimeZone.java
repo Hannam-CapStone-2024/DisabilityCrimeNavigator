@@ -1,7 +1,10 @@
 package com.example.cap.Support;
 
-public class CrimeZone {
+import java.io.Serializable;
 
+public class CrimeZone implements Serializable {
+
+    public CrimeZone() {}
     public CrimeZone(double lat, double lon, double radius, String crimeType, int grade)
     {
         this.lat = lat;
@@ -10,11 +13,11 @@ public class CrimeZone {
         this.crimeType = ConvertCrimeType(crimeType);
         this.grade = grade;
     }
-    double lat;
-    double lon;
-    double radius;
-    CrimeType crimeType;
-    int grade;
+    public double lat;
+    public double lon;
+    public double radius;
+    public CrimeType crimeType;
+    public int grade;
 
     private CrimeType ConvertCrimeType(String str)
     {
@@ -32,26 +35,6 @@ public class CrimeZone {
         return null;
     }
 
-    public double GetLat()
-    {
-        return lat;
-    }
-    public double GetLon()
-    {
-        return lon;
-    }
-    public double GetRadius()
-    {
-        return radius;
-    }
-    public CrimeType GetCrimeType()
-    {
-        return crimeType;
-    }
-    public long GetGrade()
-    {
-        return grade;
-    }
 
 
 }

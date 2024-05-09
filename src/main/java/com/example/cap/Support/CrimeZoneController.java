@@ -1,6 +1,8 @@
 package com.example.cap.Support;
 
 import com.example.cap.Map.MapController;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -8,12 +10,22 @@ import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
+
 @RestController
 public class CrimeZoneController
 {
     @GetMapping("/api/data")
-    public ArrayList<CrimeZone> GetCrimeZones() {
-        return crimeZones;
+    public String GetCrimeZone() {
+        // ObjectMapper를 사용하여 CrimeZone 객체 목록을 JSON 문자열로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            System.out.println("API 키: " + crimeZones.toArray()[0]);
+            return objectMapper.writeValueAsString(crimeZones);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public void Init()
