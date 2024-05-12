@@ -551,33 +551,3 @@ function searchRoute(startCoord, endCoord) {
     });
 }
 
-function navigation ()
-{
-    // 2. 시작, 도착 심볼찍기
-    // 시작
-    marker_s = new Tmapv2.Marker({
-        position : new Tmapv2.LatLng(37.564991,126.983937),
-        icon : "/upload/tmap/marker/pin_r_m_s.png",
-        iconSize : new Tmapv2.Size(24, 38),
-        map : map
-    });
-
-    // 도착
-    marker_e = new Tmapv2.Marker({
-        position : new Tmapv2.LatLng(37.566158,126.988940),
-        icon : "/upload/tmap/marker/pin_r_m_e.png",
-        iconSize : new Tmapv2.Size(24, 38),
-        map : map
-    });
-
-    // 3. 출발지와 목적지 주소를 사용하여 경로 탐색
-    $("#btn_select").click(function(){
-        var startAddress = $('#startAddress').val();
-        var endAddress = $('#endAddress').val();
-        geocodeAddress(startAddress, function(startCoord) {
-            geocodeAddress(endAddress, function(endCoord) {
-                searchRoute(startCoord, endCoord);
-            });
-        });
-    });
-}
