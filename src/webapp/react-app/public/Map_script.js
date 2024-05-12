@@ -102,6 +102,7 @@ function initTmap() {
                                 var noorLon = Number(resultpoisData[k].noorLon);
                                 var name = resultpoisData[k].name;
                                 var poiId = resultpoisData[k].id;
+                                var address = resultpoisData[k].area_dong;
 
                                 var pointCng = new Tmapv2.Point(noorLon, noorLat);
                                 var projectionCng = new Tmapv2.Projection.convertEPSG3857ToWGS84GEO(pointCng);
@@ -118,10 +119,64 @@ function initTmap() {
                                     map: map
                                 });
 
-                                marker.addListener('click', function () {
-                                    poiDetail(poiId); // poiDetail 함수에 poiId 전달하여 세부 정보 표시
-                                });
-                                
+                                marker.addListener('click', (function (marker, name) {
+                                    return function () {
+                                        // 클릭된 마커의 위치 가져오기
+                                        var markerPosition = marker.getPosition();
+
+                                        // 주소 정보를 저장할 변수 선언
+                                        var address = "";
+
+                                        const options = {
+                                            method: 'GET',
+                                            headers: { accept: 'application/json', appKey: 'pRNUlsEpce4d3mB0MUabnMDhHbLmdtlPrUYZI3i0' }
+                                        };
+
+                                        fetch('https://apis.openapi.sk.com/tmap/geo/reversegeocoding?version=1&lat=' + markerPosition.lat() + '&lon=' + markerPosition.lng() + '&coordType=WGS84GEO&addressType=A02&newAddressExtend=Y', options)
+                                            .then(response => response.json())
+                                            .then(response => {
+                                                // 주소 정보를 가져와서 외부 변수에 저장
+                                                address = response.addressInfo.fullAddress;
+
+
+                                                // 클릭된 마커의 이름 가져오기
+                                                var markerName = name; // 클로저를 사용하여 각 마커의 이름을 캡처함
+
+                                                var content = "<div class='m-pop' style='position: absolute; top: 10px; left: 40px; display: flex; font-size: 14px; box-shadow: 5px 5px 5px #00000040; border-radius: 10px; width : 500px; height:150px; background-color: #FFFFFF; align-items: center; padding: 5px;'>" +
+                                                    "<div class='img-box' style='width: 110px; height: 90px; border-radius: 10px; background: #f5f5f5 url(resources/images/sample/p-sk-logo.png) no-repeat center;'></div>" +
+                                                    "<div class='info-box' style='margin-left : 10px'>" +
+                                                    "<p style='margin-bottom: 7px;'>" +
+                                                    "<span class='tit' style=' font-size: 16px; font-weight: bold;'>" + markerName + "</span>" + // 클릭된 마커의 이름 표시
+                                                    "<a href='/' target='_blank' class='link' style='color: #3D6DCC; font-size: 13px; margin-left: 10px;'>홈페이지</a></p>" +
+                                                    "<p>" +
+                                                    "<span class='new-addr'> " + address + " </span>" +
+                                                    "</p>" +
+                                                    "<p>" +
+                                                    "<span class='old-addr' style='color: #707070;'>(지번) 저동1가 114</span>" +
+                                                    "</p>" +
+                                                    "</div>" +
+                                                    "<a href='javascript:void(0)' onclick='onClose()' class='btn-close' style='position: absolute; top: 10px; right: 10px; display: block; width: 15px; height: 15px; background: url(resources/images/sample/btn-close-b.svg) no-repeat center;'></a>" +
+                                                    "<div style='position: absolute; bottom: 10px; right: 10px;'>" + // 우측 하단에 버튼 추가
+                                                    <button style='margin-right: 10px;' onclick='showStartLocation(\"${markerName}\", \"${address}\", (\"${markerPosition}\"))'>출발지</button> +
+                                                    "<button onclick='showEndLocation()'>도착지</button>" +
+                                                    "</div>" +
+                                                    "</div>";
+                                                infoWindow = new Tmapv2.InfoWindow({
+                                                    position: marker.getPosition(),
+                                                    content: content,
+                                                    type: 2,
+                                                    border: '0px solid #FF0000',
+                                                    map: map,
+                                                    pixelOffset: new Tmapv2.Point(0, -50)
+                                                });
+                                            })
+                                            .catch(err => console.error(err));
+
+                                        // 클릭된 마커로 지도 이동
+                                        map.setCenter(markerPosition);
+                                    };
+                                })(marker, name));
+
                                 innerHtml += "<li><span>" + (Number(k) + 1) + "</span><span>.  " + name + "</span></li>";
 
                                 markerArr.push(marker);
@@ -130,7 +185,7 @@ function initTmap() {
 
                             $("#searchResult").html(innerHtml); // searchResult 결과값 노출
                             map.panToBounds(positionBounds); // 확장된 bounds의 중심으로 이동시키기
-                            map.zoomOut();
+                            map.setZoom(5);
 
                         },
                         error: function (request, status, error) {
@@ -151,343 +206,343 @@ function initTmap() {
     });
 
 
-        // 다중 마커 생성
-        var positions = [
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(37.56520450, 126.98602028), // 수정된 좌표
-                radius: 40
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(37.56520450, 126.98702028), // 수정된 좌표
-                radius: 100
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(37.56520450, 126.98802028), // 수정된 좌표
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.36633287, 127.4232098),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.3629067, 127.4236926),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.36432546, 127.4251265),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.36432546, 127.4251265),
-                radius: 100
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.36393117, 127.4270297),
-                radius: 65
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.36402623, 127.4281668),
-                radius: 65
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.36083132, 127.4269794),
-                radius: 35
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35780207, 127.4298596),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.3602357, 127.4297281),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.37001526, 127.4292136),
-                radius: 60
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.36723312, 127.4359954),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.36028142, 127.4320458),
-                radius: 30
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.35793733, 127.4247965),
-                radius: 30
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.35472383, 127.4275532),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.35484936, 127.4327344),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.35320126, 127.4324468),
-                radius: 300
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35219993, 127.4251999),
-                radius: 160
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.34921293, 127.4263533),
-                radius: 160
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.35448277, 127.4275969),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.35246508, 127.4279196),
-                radius: 60
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35379426, 127.4366501),
-                radius: 250
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.35044237, 127.4340469),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.35497007, 127.4354758),
-                radius: 210
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.3472931, 127.4327149),
-                radius: 110
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.34834094, 127.4345142),
-                radius: 35
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.34917049, 127.4368583),
-                radius: 35
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35021429, 127.4397383),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35238353, 127.4379903),
-                radius: 90
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35382791, 127.4373076),
-                radius: 250
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35126851, 127.4410031),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.35152318, 127.4476443),
-                radius: 500
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.34957478, 127.4517327),
-                radius: 350
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.35787668, 127.4487836),
-                radius: 400
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.34220687, 127.4483596),
-                radius: 400
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.34540459, 127.4487455),
-                radius: 100
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.3454413, 127.4461613),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.3366034, 127.4430367),
-                radius: 100
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.33819327, 127.444438),
-                radius: 100
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.33981814, 127.4461181),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.34194558, 127.4483469),
-                radius: 350
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.33834688, 127.4491505),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.336189, 127.447835),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.33381717, 127.445889),
-                radius: 100
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.33229662, 127.4415923),
-                radius: 250
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.33862179, 127.4345104),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.34067254, 127.4355911),
-                radius: 30
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(9),
-                lonlat: new Tmapv2.LatLng(36.33271995, 127.4267702),
-                radius: 1000
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.33254825, 127.4166896),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.33760157, 127.4173402),
-                radius: 200
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.33934315, 127.4140859),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.33877576, 127.4087474),
-                radius: 150
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.34144618, 127.4105214),
-                radius: 250
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.34007237, 127.403764),
-                radius: 50
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(7),
-                lonlat: new Tmapv2.LatLng(36.35352811, 127.3953219),
-                radius: 500
-            },
-            {
-                title: '범죄 가능성 등급:' + getCrimLevel(8),
-                lonlat: new Tmapv2.LatLng(36.3665151, 127.4110207),
-                radius: 140
-            }
-        ];
-
-
-        for (var i = 0; i < positions.length; i++) {
-            var lonlat = positions[i].lonlat;
-            var title = positions[i].title;
-            var radius = positions[i].radius;
-            var crimeLevel = parseInt(title.match(/\d+/)[0]); // 제목에서 범죄 수준 추출
-        
-            // 범죄 수준에 따라 투명도 계산
-            var opacity = 0.1 + (crimeLevel / 10); // 필요에 따라 이 계산을 조정합니다.
-
-            // 마커 객체 생성
-            var marker = new Tmapv2.Marker({
-                position: lonlat,
-                map: map,
-            });
-
-            // 반경을 원으로 표시
-            var circle = new Tmapv2.Circle({
-                center: lonlat,
-                radius: radius,
-                fillColor: 'rgba(255, 0, 0, ' + opacity + ')', // 투명도 동적으로 설정
-                strokeColor: 'red',
-                strokeWeight: 2,
-                map: map
-            });
-        
-            // 반경 내에 라벨 표시
-            var circleLabel = new Tmapv2.Label({
-                position: lonlat,
-                map: map,
-                text: '반경 ' + radius + 'm',
-                zIndex: 1,
-                offset: new Tmapv2.Point(0, -radius / 2),
-                textAlign: 'center',
-                fontSize: '12px',
-                fontFamily: 'Arial',
-                fontWeight: 'bold',
-                color: 'red'
-            });
+    // 다중 마커 생성
+    var positions = [
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(37.56520450, 126.98602028), // 수정된 좌표
+            radius: 40
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(37.56520450, 126.98702028), // 수정된 좌표
+            radius: 100
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(37.56520450, 126.98802028), // 수정된 좌표
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.36633287, 127.4232098),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.3629067, 127.4236926),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.36432546, 127.4251265),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.36432546, 127.4251265),
+            radius: 100
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.36393117, 127.4270297),
+            radius: 65
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.36402623, 127.4281668),
+            radius: 65
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.36083132, 127.4269794),
+            radius: 35
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35780207, 127.4298596),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.3602357, 127.4297281),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.37001526, 127.4292136),
+            radius: 60
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.36723312, 127.4359954),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.36028142, 127.4320458),
+            radius: 30
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.35793733, 127.4247965),
+            radius: 30
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.35472383, 127.4275532),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.35484936, 127.4327344),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.35320126, 127.4324468),
+            radius: 300
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35219993, 127.4251999),
+            radius: 160
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.34921293, 127.4263533),
+            radius: 160
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.35448277, 127.4275969),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.35246508, 127.4279196),
+            radius: 60
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35379426, 127.4366501),
+            radius: 250
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.35044237, 127.4340469),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.35497007, 127.4354758),
+            radius: 210
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.3472931, 127.4327149),
+            radius: 110
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.34834094, 127.4345142),
+            radius: 35
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.34917049, 127.4368583),
+            radius: 35
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35021429, 127.4397383),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35238353, 127.4379903),
+            radius: 90
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35382791, 127.4373076),
+            radius: 250
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35126851, 127.4410031),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.35152318, 127.4476443),
+            radius: 500
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.34957478, 127.4517327),
+            radius: 350
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.35787668, 127.4487836),
+            radius: 400
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.34220687, 127.4483596),
+            radius: 400
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.34540459, 127.4487455),
+            radius: 100
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.3454413, 127.4461613),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.3366034, 127.4430367),
+            radius: 100
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.33819327, 127.444438),
+            radius: 100
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.33981814, 127.4461181),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.34194558, 127.4483469),
+            radius: 350
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.33834688, 127.4491505),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.336189, 127.447835),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.33381717, 127.445889),
+            radius: 100
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.33229662, 127.4415923),
+            radius: 250
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.33862179, 127.4345104),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.34067254, 127.4355911),
+            radius: 30
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(9),
+            lonlat: new Tmapv2.LatLng(36.33271995, 127.4267702),
+            radius: 1000
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.33254825, 127.4166896),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.33760157, 127.4173402),
+            radius: 200
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.33934315, 127.4140859),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.33877576, 127.4087474),
+            radius: 150
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.34144618, 127.4105214),
+            radius: 250
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.34007237, 127.403764),
+            radius: 50
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.35352811, 127.3953219),
+            radius: 500
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(8),
+            lonlat: new Tmapv2.LatLng(36.3665151, 127.4110207),
+            radius: 140
         }
-        
-        
-}  
+    ];
+
+
+    for (var i = 0; i < positions.length; i++) {
+        var lonlat = positions[i].lonlat;
+        var title = positions[i].title;
+        var radius = positions[i].radius;
+        var crimeLevel = parseInt(title.match(/\d+/)[0]); // 제목에서 범죄 수준 추출
+
+        // 범죄 수준에 따라 투명도 계산
+        var opacity = 0.1 + (crimeLevel / 10); // 필요에 따라 이 계산을 조정합니다.
+
+        // 마커 객체 생성
+        var marker = new Tmapv2.Marker({
+            position: lonlat,
+            map: map,
+        });
+
+        // 반경을 원으로 표시
+        var circle = new Tmapv2.Circle({
+            center: lonlat,
+            radius: radius,
+            fillColor: 'rgba(255, 0, 0, ' + opacity + ')', // 투명도 동적으로 설정
+            strokeColor: 'red',
+            strokeWeight: 2,
+            map: map
+        });
+
+        // 반경 내에 라벨 표시
+        var circleLabel = new Tmapv2.Label({
+            position: lonlat,
+            map: map,
+            text: '반경 ' + radius + 'm',
+            zIndex: 1,
+            offset: new Tmapv2.Point(0, -radius / 2),
+            textAlign: 'center',
+            fontSize: '12px',
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            color: 'red'
+        });
+    }
+
+
+}
 
 
 // 범죄 등급에 해당하는 정수 값을 반환하는 함수
@@ -502,4 +557,55 @@ function getCrimLevel(level) {
         default:
             return level;
     }
+}
+function onClose(popup) {
+    infoWindow.setVisible(false);
+}
+
+var markerList = [];
+var pointArray = [];
+
+// 2. 시작, 도착 심볼찍기
+function showStartLocation(Name, Address, Posion) {
+
+        // 시작
+        addMarker(Name,Posion.lat,Posion.lon,1);
+        // 도착 
+        addMarker("llEnd",127.11971717230388,37.49288934463672,2);
+        function addMarker(status, lon, lat, tag) {
+        //출도착경유구분
+        //이미지 파일 변경.
+        var markerLayer;
+        switch (status) {
+            case "llStart":
+                imgURL = '/upload/tmap/marker/pin_r_m_s.png';
+                break;
+            case "llPass":
+                imgURL = '/upload/tmap/marker/pin_b_m_p.png';
+                break;
+            case "llEnd":
+                imgURL = '/upload/tmap/marker/pin_r_m_e.png';
+                break;
+            default:
+        };
+        var marker = new Tmapv2.Marker({
+            position: new Tmapv2.LatLng(lat,lon),
+            icon: imgURL,
+            map: map
+        });
+        // 마커 드래그 설정
+        marker.tag = tag;
+        marker.addListener("dragend", function (evt) {
+        markerListenerEvent(evt);
+        });
+        marker.addListener("drag", function (evt) {    	
+            markerObject = markerList[tag];
+        });
+        markerList[tag] = marker;
+        return marker;
+    }
+}
+
+function showEndLocation(Name, Address, Posion) {
+    addMarker(Name,Posion.lat,Posion.lon,2);
 }
