@@ -1,5 +1,5 @@
 //세종특별시 노인장애인 보호구역
-package com.example.cap.Support;
+package com.cap.Support;
 
 import java.io.BufferedReader;
 import java.io.IOException;

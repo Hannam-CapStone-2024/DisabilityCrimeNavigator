@@ -1,4 +1,4 @@
-package com.example.cap.Support;
+package com.cap.Support;
 /* 경찰청 대전광역시경찰청_대전지역 시간대별 범죄 발생 현황 */
 
 import com.fasterxml.jackson.annotation.JsonProperty;

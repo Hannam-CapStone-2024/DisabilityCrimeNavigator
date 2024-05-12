@@ -1,7 +1,7 @@
-package com.example.cap;
+package com.cap;
 
-import com.example.cap.Map.MapController;
-import com.example.cap.Support.CrimeZoneController;
+import com.cap.Support.CrimeZoneController;
+import com.cap.Map.MapController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

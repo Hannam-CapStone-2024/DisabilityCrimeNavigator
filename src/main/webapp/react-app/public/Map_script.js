@@ -150,28 +150,23 @@ async function initTmap() {
 
     });
 
-    fetch("/api/data")
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then((data) => {
-            console.log(data); // 데이터 출력
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error); // 에러 처리
-        });
+    fetch("/GetCrimeZone")	// 호출
+        .then((response) => console.log("response:", response))	// 성공
+        .catch((error) => console.log("error:", error));	// 실패
 
-    fetch("/api/data")
-        .then((response) => response.json())
-        .then((data) => {
-            console.log(data); // 데이터 출력
-        })
-        .catch((error) => {
-            console.error("Error fetching data:", error); // 에러 처리
-        });
+
+    var positions = [
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(37.56520450, 126.98602028), // 수정된 좌표
+            radius: 40
+        },
+        {
+            title: '범죄 가능성 등급:' + getCrimLevel(7),
+            lonlat: new Tmapv2.LatLng(36.35352811, 127.3953219),
+            radius: 500
+        }
+    ];
 
         for (var i = 0; i < positions.length; i++) {
             var lonlat = positions[i].lonlat;
@@ -212,8 +207,6 @@ async function initTmap() {
                 color: 'red'
             });
         }
-        
-        
 }  
 
 
