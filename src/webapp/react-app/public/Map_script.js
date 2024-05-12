@@ -119,7 +119,7 @@ function initTmap() {
                                     map: map
                                 });
 
-                                marker.addListener('click', (function (marker, name) {
+                                marker.addEventListener('click', (function (marker, name) {
                                     return function () {
                                         // 클릭된 마커의 위치 가져오기
                                         var markerPosition = marker.getPosition();
@@ -147,7 +147,7 @@ function initTmap() {
                                                     "<div class='info-box' style='margin-left : 10px'>" +
                                                     "<p style='margin-bottom: 7px;'>" +
                                                     "<span class='tit' style=' font-size: 16px; font-weight: bold;'>" + markerName + "</span>" + // 클릭된 마커의 이름 표시
-                                                    "<a href='/' target='_blank' class='link' style='color: #3D6DCC; font-size: 13px; margin-left: 10px;'>홈페이지</a></p>" +
+                                                    "<a href='/src/webapp/react-app/public' target='_blank' class='link' style='color: #3D6DCC; font-size: 13px; margin-left: 10px;'>홈페이지</a></p>" +
                                                     "<p>" +
                                                     "<span class='new-addr'> " + address + " </span>" +
                                                     "</p>" +

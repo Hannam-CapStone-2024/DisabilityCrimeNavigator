@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
+    <script src="Map_script.js"></script>
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=pRNUlsEpce4d3mB0MUabnMDhHbLmdtlPrUYZI3i0"></script>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Navigator Main UI</title>
     <link rel="stylesheet" href="main.css">
 </head>
-<body onload="initTmap();">
+<body onload = initTmap()>
     <div class="appbar">
         <h1>Navigator</h1>
         <ul>
@@ -36,9 +39,6 @@
             <!-- 지도 -->
             <div id="map_div"></div>
         </div>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> 
-    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=pRNUlsEpce4d3mB0MUabnMDhHbLmdtlPrUYZI3i0"></script>
-    <script src="Map_script.js"></script>
     <script>
         // 팝업을 보여주는 함수
         function showPopup(resultContent) {
@@ -53,10 +53,10 @@
 
         // 검색을 수행하는 함수
         function search() {
-            var searchKeyword = document.getElementById('searchKeyword').value;
+            let searchKeyword = document.getElementById('searchKeyword').value;
             console.log('검색어:', searchKeyword);
             // 여기에 검색 결과를 가져와서 팝업으로 표시하는 로직을 추가하세요.
-            var resultContent = '검색 결과입니다: ' + searchKeyword;
+            let resultContent = '검색 결과입니다: ' + searchKeyword;
             showPopup(resultContent);
 
             // 팝업이 열리면서 검색 결과 컨테이너를 표시
@@ -65,4 +65,3 @@
     </script>
 </body>
 </html>
-<!-- 아아아 -->
