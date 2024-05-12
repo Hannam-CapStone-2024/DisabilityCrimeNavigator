@@ -1,17 +1,12 @@
-package com.example.cap.Support;
+package com.cap.Support;
 
-import com.example.cap.Map.MapController;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.apache.logging.log4j.message.MapMessage.MapFormat.JSON;
 
 @Controller
 public class CrimeZoneController

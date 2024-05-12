@@ -1,4 +1,4 @@
-package com.example.cap.Support;
+package com.cap.Support;
 
 public enum CrimeType {
     Robbery,//강도

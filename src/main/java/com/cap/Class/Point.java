@@ -1,4 +1,4 @@
-package com.example.cap.Class;
+package com.cap.Class;
 
 public class Point
 {

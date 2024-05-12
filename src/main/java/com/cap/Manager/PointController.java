@@ -1,7 +1,7 @@
-package com.example.cap.Manager;
+package com.cap.Manager;
 
-import com.example.cap.Class.Point;
-import com.example.cap.Support.CsvLoader;
+import com.cap.Class.Point;
+import com.cap.Support.CsvLoader;
 
 import java.util.ArrayList;
 import java.util.List;
