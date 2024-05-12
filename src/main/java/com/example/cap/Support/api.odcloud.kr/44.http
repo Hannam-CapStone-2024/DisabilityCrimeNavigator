@@ -1,0 +1,4 @@
+##요일별 범죄 발생 현황##
+GET https://examples.http-client.intellij.net/get
+    ?generated-in=IntelliJ IDEA
+

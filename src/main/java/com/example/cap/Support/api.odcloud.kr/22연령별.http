@@ -1,0 +1,66 @@
+## 연령별 보행자 사망 부상 통계 ##
+GET https://api.odcloud.kr/api/15127580/v1/uddi:0f5bb165-6b92-4b26-9742-d22f3c69583b?page=1&perPage=10
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            //요청을 보낼 URL
+            String url = "https://api.odcloud.kr/api/15127580/v1/uddi:0f5bb165-6b92-4b26-9742-d22f3c69583b?page=1&perPage=10";
+
+            // URL 객체 생성
+            URL obj = new URL(url);
+
+            // HTTP 연결 객체 생성
+            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+            // 요청 방식 설정 (GET 방식)
+            con.setRequestMethod("GET");
+
+            // 응답 코드 확인
+            int responseCode = con.getResponseCode();
+            System.out.println("Response Code: " + responseCode);
+
+            // 응답 내용 읽기
+            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
+            String inputLine;
+            StringBuffer response = new StringBuffer();
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // 응답 내용 출력
+            System.out.println("Response Content: " + response.toString());
+
+            // 연결 종료
+            con.disconnect();
+
+            // CSV 파일 경로
+            String csvFile = "경찰청 대전광역시경찰청_연령별 보행자 사망 부상 통계_20231231.csv";
+            String line;
+            String cvsSplitBy = ","; // CSV 파일의 구분자 설정
+
+            // CSV 파일 읽기
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));
+            while ((line = br.readLine()) != null) {
+                // CSV 라인을 쉼표를 기준으로 분리하여 배열로 저장
+                String[] data = line.split(cvsSplitBy);
+
+                // CSV 데이터 사용 예시
+                // 여기에 필요한 작업 수행
+                for (String value : data) {
+                    System.out.print(value + " ");
+                }
+                System.out.println(); // 줄 바꿈
+            }
+            br.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

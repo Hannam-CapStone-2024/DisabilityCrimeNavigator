@@ -16,7 +16,7 @@ public class CapApplication {
 
         System.out.println("API 키: " + MapController.AllowURL(key));
 
-        System.out.println("범죄 : " + CrimeZoneController.GetInstance().GetCrimeZones());
+        System.out.println("범죄 : " + CrimeZoneController.GetInstance().GetCrimeZone());
     }
 
 }
