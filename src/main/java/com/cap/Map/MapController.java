@@ -1,4 +1,4 @@
-package com.example.cap.Map;
+package com.cap.Map;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

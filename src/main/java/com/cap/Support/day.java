@@ -1,4 +1,4 @@
-package com.example.cap.Support;
+package com.cap.Support;
 /*요일별 범죄*/
 
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -1,4 +1,4 @@
-package com.example.cap.Support;
+package com.cap.Support;
 
 public class HttpResponse {
     public HttpEntity getEntity() {

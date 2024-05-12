@@ -1,4 +1,4 @@
-package com.example.cap.Support;
+package com.cap.Support;
 
 import java.io.BufferedReader;
 import java.io.IOException;
