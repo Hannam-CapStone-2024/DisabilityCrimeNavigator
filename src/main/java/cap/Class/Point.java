@@ -1,39 +1,59 @@
 package cap.Class;
 
-public class Point
-{
-    private int id;
-    private int x;
-    private int y;
+public class Point {
+    private double latitude;
+    private double longitude;
+    private double radius;
     private String name;
-    private String descript;
+    private int crimeLevel;
 
-   public Point(int id, int x, int y, String name, String descript)
-   {
-       this.id = id;
-       this.x = x;
-       this.y = y;
-       this.name = name;
-       this.descript = descript;
-   }
-
-    public int getX() {
-        return x;
+    public Point(double latitude, double longitude, double radius, String name, int crimeLevel) {
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.radius = radius;
+        this.name = name;
+        this.crimeLevel = crimeLevel;
     }
 
-    public int getY() {
-        return y;
+    // Getters
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public double getRadius() {
+        return radius;
     }
 
     public String getName() {
         return name;
     }
 
-    public String getDescript() {
-        return descript;
+    public int getCrimeLevel() {
+        return crimeLevel;
     }
 
-    public int getId() {
-        return id;
+    // Setters
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
+    }
+
+    public void setRadius(double radius) {
+        this.radius = radius;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCrimeLevel(int crimeLevel) {
+        this.crimeLevel = crimeLevel;
     }
 }

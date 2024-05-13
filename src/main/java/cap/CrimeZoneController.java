@@ -1,6 +1,7 @@
 package cap;
 
-import cap.Support.CrimeZone;
+import cap.Class.CrimeZone;
+import cap.Support.CrimeType;
 import cap.Support.CsvLoader;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,28 +13,44 @@ import java.util.List;
 @RestController
 public class CrimeZoneController
 {
-    @GetMapping("/crime")
+    @GetMapping("/GetCrimeZone")
     public String GetCrimeZone() {
-        //ObjectMapper를 사용하여 CrimeZone 객체 목록을 JSON 문자열로 변환
-        ObjectMapper objectMapper = new ObjectMapper();
+        for (CrimeZone zone : GetCrimeZones()) {
+            System.out.println("Latitude: " + zone.lon);
+            System.out.println("Longitude: " + zone.lat);
+            System.out.println("Radius: " + zone.radius);
+            System.out.println("Name: " + zone.crimeType);
+            System.out.println("Crime Level: " + zone.grade);
+            System.out.println("------------------------");
+        }
 
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonResult;
         try {
-            System.out.println("API 키: " + crimeZones.toArray()[0]);
-            return objectMapper.writeValueAsString(crimeZones);
+            jsonResult = mapper.writeValueAsString(GetCrimeZones());
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            return null;
+            jsonResult = "{\"error\": \"Error processing crime zones\"}";
         }
+        System.out.println("jsonResult: " + jsonResult);
+        return jsonResult;
     }
 
-    public void Init()
+    @GetMapping("/TestCrime")
+    public String TestCrime() {
+        return GetCrimeZones().toString();
+    }
+
+    public ArrayList<CrimeZone> GetCrimeZones()
     {
+        ArrayList<CrimeZone> crimeZones = new ArrayList<>();
         var csvLoader = CsvLoader.readCSV("src/main/java/cap/DB/CrimePoint_within3km.csv");
 
         for (List<String> arr : csvLoader) {
             CrimeZone crimeZone = parseCrimeZone(arr.toArray(new String[0]));
             crimeZones.add(crimeZone);
         }
+        return crimeZones;
     }
 
     private CrimeZone parseCrimeZone(String[] arr) {
@@ -42,10 +59,10 @@ public class CrimeZoneController
         double radius = Double.parseDouble(arr[2].trim());
         String name = arr[3];
         int crimeLevel = Integer.parseInt(arr[4].trim());
-        return new CrimeZone(latitude, longitude, radius, name, crimeLevel);
+        return new CrimeZone(latitude, longitude, radius, CrimeType.fromValue(name), crimeLevel);
     }
 
-    private ArrayList<CrimeZone> crimeZones = new ArrayList<>();
+
 
     static CrimeZoneController instance;
 
@@ -54,7 +71,7 @@ public class CrimeZoneController
         if(instance == null)
         {
             instance = new CrimeZoneController();
-            instance.Init();
+            instance.GetCrimeZones();
         }
         return instance;
     }

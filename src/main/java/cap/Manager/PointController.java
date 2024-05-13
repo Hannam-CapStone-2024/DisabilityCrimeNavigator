@@ -46,19 +46,19 @@ public class PointController {
         List<List<String>> csvList = CsvLoader.readCSV("src/main/java/com/example/cap/DB/PointDB.csv");
 
         int id;
-        int x;
-        int y;
+        double x;
+        double y;
         String name;
-        String descript;
+        int level;
 
         for (List<String> strings : csvList) {
             id = Integer.parseInt(strings.get(0));
-            x = Integer.parseInt(strings.get(1));
-            y = Integer.parseInt(strings.get(2));
+            x = Double.parseDouble(strings.get(1));
+            y = Double.parseDouble(strings.get(2));
             name = strings.get(3);
-            descript = strings.get(4);
+            level = Integer.parseInt(strings.get(4));
 
-            pointList.add(new Point(id, x, y, name, descript));
+            pointList.add(new Point(id, x, y, name, level));
         }
         return pointList;
     }
