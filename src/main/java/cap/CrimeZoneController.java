@@ -1,4 +1,4 @@
-package cap.controller;
+package cap;
 
 import cap.Support.CrimeZone;
 import cap.Support.CsvLoader;
@@ -12,19 +12,18 @@ import java.util.List;
 @RestController
 public class CrimeZoneController
 {
-    @GetMapping("/testsss")
+    @GetMapping("/crime")
     public String GetCrimeZone() {
-        // ObjectMapper를 사용하여 CrimeZone 객체 목록을 JSON 문자열로 변환
+        //ObjectMapper를 사용하여 CrimeZone 객체 목록을 JSON 문자열로 변환
         ObjectMapper objectMapper = new ObjectMapper();
-        /*
+
         try {
             System.out.println("API 키: " + crimeZones.toArray()[0]);
             return objectMapper.writeValueAsString(crimeZones);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             return null;
-        }*/
-        return "";
+        }
     }
 
     public void Init()
