@@ -6,6 +6,11 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 public class CrimeZone {
 
+    public String GetImgLink()
+    {
+        return "default_Link" + crimeType.name();
+    }
+
     public double lat;
     public double lon;
     public double radius;

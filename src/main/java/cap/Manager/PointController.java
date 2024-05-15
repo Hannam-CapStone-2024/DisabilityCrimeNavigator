@@ -1,6 +1,5 @@
 package cap.Manager;
 
-import cap.Class.Point;
 import cap.Support.CsvLoader;
 
 import java.util.ArrayList;

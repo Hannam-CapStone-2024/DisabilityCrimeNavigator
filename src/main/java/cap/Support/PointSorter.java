@@ -1,7 +1,5 @@
 package cap.Support;
 
-import cap.Class.Point;
-
 import java.util.List;
 
 public abstract class PointSorter
