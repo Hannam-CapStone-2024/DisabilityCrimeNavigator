@@ -150,65 +150,6 @@ async function initTmap() {
         });
 
     });
-
-
-    fetch("http://localhost:8080/test")	// 호출
-        .then((response) => console.log("response:", response))	// 성공
-        .catch((error) => console.log("error:", error));	// 실패
-
-
-    var positions = [
-        {
-            title: '범죄 가능성 등급:' + getCrimLevel(7),
-            lonlat: new Tmapv2.LatLng(37.56520450, 126.98602028), // 수정된 좌표
-            radius: 40
-        },
-        {
-            title: '범죄 가능성 등급:' + getCrimLevel(7),
-            lonlat: new Tmapv2.LatLng(36.35352811, 127.3953219),
-            radius: 500
-        }
-    ];
-
-        for (var i = 0; i < positions.length; i++) {
-            var lonlat = positions[i].lonlat;
-            var title = positions[i].title;
-            var radius = positions[i].radius;
-            var crimeLevel = parseInt(title.match(/\d+/)[0]); // 제목에서 범죄 수준 추출
-        
-            // 범죄 수준에 따라 투명도 계산
-            var opacity = 0.1 + (crimeLevel / 10); // 필요에 따라 이 계산을 조정합니다.
-
-            // 마커 객체 생성
-            var marker = new Tmapv2.Marker({
-                position: lonlat,
-                map: map,
-            });
-
-            // 반경을 원으로 표시
-            var circle = new Tmapv2.Circle({
-                center: lonlat,
-                radius: radius,
-                fillColor: 'rgba(255, 0, 0, ' + opacity + ')', // 투명도 동적으로 설정
-                strokeColor: 'red',
-                strokeWeight: 2,
-                map: map
-            });
-        
-            // 반경 내에 라벨 표시
-            var circleLabel = new Tmapv2.Label({
-                position: lonlat,
-                map: map,
-                text: '반경 ' + radius + 'm',
-                zIndex: 1,
-                offset: new Tmapv2.Point(0, -radius / 2),
-                textAlign: 'center',
-                fontSize: '12px',
-                fontFamily: 'Arial',
-                fontWeight: 'bold',
-                color: 'red'
-            });
-        }
 }  
 
     async function fetchCrimeData() {
