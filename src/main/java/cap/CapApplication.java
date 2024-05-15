@@ -1,6 +1,7 @@
 package cap;
 
 import cap.Map.MapController;
+import cap.Support.CrimeType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -15,7 +16,7 @@ public class CapApplication {
 
         System.out.println("API 키: " + MapController.AllowURL(key));
 
-        System.out.println("범죄 : " + CrimeZoneController.GetInstance().GetCrimeZone());
+        System.out.println("범죄 : " + CrimeZoneController.GetInstance().GetCrimeZone("Sexual_Violence"));
     }
 
 }

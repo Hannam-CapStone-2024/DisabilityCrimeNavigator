@@ -150,7 +150,7 @@ async function initTmap() {
 
     });
 
-    fetchData();
+    fetchData("Murder");
 }  
 
 
@@ -168,9 +168,9 @@ function getCrimLevel(level) {
     }
 }
 
-async function fetchData() {
+async function fetchData(str) {
     try {
-        const response = await fetch("/GetCrimeZone");
+        const response = await fetch(`/GetCrimeZone?crimeType=${str}`)
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }

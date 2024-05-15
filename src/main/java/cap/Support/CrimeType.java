@@ -7,7 +7,8 @@ public enum CrimeType {
     Robbery("Robbery"),
     Murder("Murder"),
     Sexual_Violence("Sexual_Violence"),
-    Violence("Violence");
+    Violence("Violence"),
+    None("None");
 
     private String value;
 
@@ -27,6 +28,6 @@ public enum CrimeType {
                 return type;
             }
         }
-        throw new IllegalArgumentException("Invalid CrimeType value: " + value);
+        return CrimeType.None;
     }
 }

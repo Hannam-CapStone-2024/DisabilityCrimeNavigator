@@ -14,7 +14,7 @@ import java.util.List;
 public class CrimeZoneController
 {
     @GetMapping("/GetCrimeZone")
-    public String GetCrimeZone() {
+    public String GetCrimeZone(@RequestParam("crimeType") String crimeType) {
         for (CrimeZone zone : GetCrimeZones()) {
             System.out.println("Latitude: " + zone.lon);
             System.out.println("Longitude: " + zone.lat);
@@ -24,10 +24,12 @@ public class CrimeZoneController
             System.out.println("------------------------");
         }
 
+
         ObjectMapper mapper = new ObjectMapper();
         String jsonResult;
         try {
-            jsonResult = mapper.writeValueAsString(GetCrimeZones());
+            System.out.println("Output: " + CrimeType.fromValue(crimeType));
+            jsonResult = mapper.writeValueAsString(GetCrimeZones(CrimeType.fromValue(crimeType)));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             jsonResult = "{\"error\": \"Error processing crime zones\"}";
@@ -62,7 +64,19 @@ public class CrimeZoneController
         return new CrimeZone(latitude, longitude, radius, CrimeType.fromValue(name), crimeLevel);
     }
 
+    public ArrayList<CrimeZone> GetCrimeZones(CrimeType crimeType)
+    {
+        var it = new ArrayList<CrimeZone>();
 
+        if(crimeType == CrimeType.None) return GetCrimeZones();
+
+        for (CrimeZone zone : GetCrimeZones())
+        {
+            if(crimeType == zone.crimeType)
+                it.add(zone);
+        }
+        return it;
+    }
 
     static CrimeZoneController instance;
 
