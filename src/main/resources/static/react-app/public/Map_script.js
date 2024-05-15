@@ -181,6 +181,7 @@ async function initTmap() {
             var marker = new Tmapv2.Marker({
                 position: lonlat,
                 map: map,
+                icon: url("/public/icon_Murder.jpg")
             });
 
             // 반경을 원으로 표시
