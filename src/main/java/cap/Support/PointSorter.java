@@ -1,6 +1,6 @@
-package cap.Support;
+package com.example.cap.Support;
 
-import cap.Class.Point;
+import com.example.cap.Class.Point;
 
 import java.util.List;
 
