@@ -31,6 +31,15 @@
     <!-- 검색 버튼 -->
     <button id="btn_select" onclick="search()">Search</button>
 </div>
+<!--버튼-->
+<select name="crime" id="crimeSelect" onchange="fetchData(this.value)">
+    <option value="nothing">범죄별 지역보기</option>
+    <option value="Robbery">강도</option>
+    <option value="Violence">폭력</option>
+    <option value="Murder">살인</option>
+    <option value="Sexual_Violence">성범죄</option>
+    <option value="none">전체 보기</option>
+</select>
 <!-- 맵 컨테이너 -->
 <div class="map-container">
     <!-- 지도 -->
@@ -62,6 +71,7 @@
         // 팝업이 열리면서 검색 결과 컨테이너를 표시
         document.getElementById('popup').style.display = 'block';
     }
+
 </script>
 </body>
 </html>

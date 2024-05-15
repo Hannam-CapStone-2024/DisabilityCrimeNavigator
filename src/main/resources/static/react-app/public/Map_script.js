@@ -1,5 +1,6 @@
 var map, marker;
 var markerArr = [];
+var circleArr = [];
 var labelArr = [];
 
 async function initTmap() {
@@ -121,7 +122,7 @@ async function initTmap() {
                                 marker.addListener('click', function () {
                                     poiDetail(poiId); // poiDetail 함수에 poiId 전달하여 세부 정보 표시
                                 });
-                                
+
                                 innerHtml += "<li><span>" + (Number(k) + 1) + "</span><span>.  " + name + "</span></li>";
 
                                 markerArr.push(marker);
@@ -149,6 +150,7 @@ async function initTmap() {
         });
 
     });
+
 
     fetch("http://localhost:8080/test")	// 호출
         .then((response) => console.log("response:", response))	// 성공
@@ -209,17 +211,143 @@ async function initTmap() {
         }
 }  
 
+    async function fetchCrimeData() {
+        const crimeType = document.getElementById('crimeSelect').value;
+        try {
+            const response = await fetch(`/crimeData?crimeType=${crimeType}`);
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const data = await response.json();
+            displayCrimeData(data);
+
+        } catch (error) {
+            console.error("There was a problem with the fetch operation:", error);
+        }
+    }
+
+    function displayCrimeData(data) {
+        const crimeDataElement = document.getElementById('crimeData');
+        crimeDataElement.innerHTML = `<h2>${data.crimeType}</h2>
+                                          <p>Number of incidents: ${data.incidents}</p>
+                                          <p>Severity: ${data.severity}</p>`;
+    }
+
+
 
 // 범죄 등급에 해당하는 정수 값을 반환하는 함수
 function getCrimLevel(level) {
     switch (level) {
-        case 7:
-            return 7;
-        case 8:
-            return 8;
-        case 9:
-            return 9;
+        case 1:
+            return 1;
+        case 2:
+            return 2;
+        case 3:
+            return 3;
         default:
             return level;
     }
 }
+
+
+function deleteMarkers()
+{
+    if (markerArr.length > 0) {
+        for (var i = 0; i < markerArr.length; i++) {
+            markerArr[i].setMap(null); // 지도에서 마커 제거
+        }
+        markerArr = []; // 배열 초기화
+    }
+
+    if (circleArr.length > 0) {
+        for (var i = 0; i < circleArr.length; i++) {
+            circleArr[i].setMap(null); // 지도에서 원 제거
+        }
+        circleArr = []; // 배열 초기화
+    }
+
+    if (labelArr.length > 0) {
+        for (var i = 0; i < labelArr.length; i++) {
+            labelArr[i].setMap(null); // 지도에서 레이블 제거
+        }
+        labelArr = []; // 배열 초기화
+    }
+}
+
+async function fetchData(str) {
+    deleteMarkers();
+    if (str === "nothing") {
+        return;
+    }
+    try {
+        const response = await fetch(`/GetCrimeZone?crimeType=${str}`)
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        console.log(data);
+
+        var originalDatasms = data; // 주어진 JSON 배열 데이터
+
+        for (var i = 0; i < originalDatasms.length; i++) {
+            var lonlat = new Tmapv2.LatLng(originalDatasms[i].lat, originalDatasms[i].lon);
+            var title = '범죄 가능성 등급: ' + getCrimLevel(originalDatasms[i].grade);
+            var radius = originalDatasms[i].radius;
+            var crimeLevel = parseInt(title.match(/\d+/)[0]);
+            console.log(lonlat);
+            // 투명도를 조절하기 위해 기하급수적으로 증가시키는 방식
+            var color;
+
+            // 등급에 따라 색상 설정
+            switch(crimeLevel) {
+                case 1:
+                    color = 'rgb(255,00,00)';
+                    break;
+                case 2:
+                    color = 'rgb(255,69,0)';
+                    break;
+                case 3:
+                    color = 'rgb(255,215,0)';
+                    break;
+                default:
+                    color = 'black';
+                    break;
+            }
+
+            var marker = new Tmapv2.Marker({
+                position: lonlat,
+                map: map,
+                url: '/images   /marker_1.png',
+            });
+
+            var circle = new Tmapv2.Circle({
+                center: lonlat,
+                radius: radius,
+                fillColor: color,
+                fillOpacity: 0.5,
+                strokeColor: color,
+                strokeWeight: 2,
+                map: map
+            });
+
+            var circleLabel = new Tmapv2.Label({
+                position: lonlat,
+                map: map,
+                text: '반경 ' + radius + 'm',
+                zIndex: 1,
+                offset: new Tmapv2.Point(0, -radius / 2),
+                textAlign: 'center',
+                fontSize: '12px',
+                fontFamily: 'Arial',
+                fontWeight: 'bold',
+                color: 'red'
+            });
+            markerArr.push(marker);
+            circleArr.push(circle);
+            labelArr.push(circleLabel);
+        }
+    } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
+    }
+}
+
