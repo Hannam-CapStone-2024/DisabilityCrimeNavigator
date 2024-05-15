@@ -1,0 +1,91 @@
+/* styles.css */
+
+/* 기본 스타일 */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Noto Sans KR', sans-serif; /* 한글 폰트 추가 */
+}
+
+/* 네비게이션 바 스타일 */
+nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #1976D2; /* 기존 스타일 수정 */
+  color: #FFF;
+  padding: 10px 0;
+  text-align: center;
+  font-size: 24px; /* 폰트 사이즈 변경 */
+  z-index: 2;
+}
+
+nav h1 {
+  margin: 0; /* 폰트 위아래 여백 제거 */
+}
+
+/* 앱바 스타일 */
+.appbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #1976D2;
+  color: #FFF;
+  padding: 20px; /* 내부 여백 증가 */
+}
+
+.appbar h1 {
+  margin: 0;
+  font-size: 32px; /* 폰트 사이즈 증가 */
+}
+
+/* 폼 컨테이너 스타일 */
+.form-container {
+  width: 80%; /* 폼 너비 조정 */
+  margin: 0 auto; /* 가운데 정렬 */
+  text-align: center;
+}
+
+/* 입력 필드 및 버튼 스타일 */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 15px; /* 내부 여백 증가 */
+  margin: 10px 0; /* 상하 여백 추가 */
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+button {
+  width: 100%;
+  padding: 15px;
+  margin: 10px 0;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50; /* 수정 */
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049; /* 수정 */
+}
+
+p {
+  margin: 10px 0; /* 상하 여백 추가 */
+}
+
+/* 링크 스타일 수정 */
+a {
+  color: #1976D2;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
