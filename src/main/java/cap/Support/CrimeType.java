@@ -4,12 +4,18 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum CrimeType {
-    Robbery("Robbery"),
-    Murder("Murder"),
-    Sexual_Violence("Sexual_Violence"),
-    Violence("Violence"),
+    Robbery("Robbery"), //강도
+    Murder("Murder"), //살인
+    Sexual_Violence("Sexual_Violence"), //성폭력
+    Violence("Violence"), //폭력
+    Etc("Etc"), //기타형법
+    Moral("Moral"), //풍속범
+    Intelli("Intelli"), //지능범
+    Violent("Violent"), //강력범
+    Theft("Theft"), //절도범
+    Special("Special"),
     None("None");
-
+//특별범법
     private String value;
 
     CrimeType(String value) {
