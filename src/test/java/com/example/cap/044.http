@@ -8,6 +8,7 @@ import java.io.IOException;
 
 public class ApiExplorer {
     public static void main(String[] args) throws IOException {
+        System.out.println("Response code: " + conn.getResponseCode());
         // API 호출을 위한 URL 생성
         StringBuilder urlBuilder = new StringBuilder("http://apis.data.go.kr/5690000/sjProZone/sj_00000220"); /*URL*/
         urlBuilder.append("?" + URLEncoder.encode("serviceKey","UTF-8") + "=사용자의_서비스_키"); /*VKZ%2BE4KtSn5mw4VQls6l7DTiGDCkKP%2Bd042ELA6gECbbJV4YWsIiPg0WGj2fBsCVKWG26u4oJ1G3MpeioU%2BTMg%3D%3D*/
