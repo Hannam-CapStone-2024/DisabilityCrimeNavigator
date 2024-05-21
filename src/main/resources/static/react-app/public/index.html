@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script
+        src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=pRNUlsEpce4d3mB0MUabnMDhHbLmdtlPrUYZI3i0"></script>
+    <script src="map.js"></script>
+    <script src="modal.js"></script> 
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigator Main UI</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body onload="initTmap();">
+    <div class="appbar">
+        <h1>Navigator</h1>
+        <ul>
+            <li><a href="login.html">로그인</a></li>
+            <li><a href="pedestrian_route.html">도보 경로 안내</a></li>
+            <li><a href="index.html">교통 혼잡도</a></li>
+        </ul>
+    </div>
+    <div class="map-container">
+        <div class="search-container">
+            <input type="text" id="searchKeyword" placeholder="Enter address"> 
+            <button id="btn_select" onclick="search()">Search</button>
+            <div id="searchResult" class="result-list"></div>
+        </div>
+        <div id="map_div"></div>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2024 Team Navigator. All rights reserved.</p>
+    </footer>
+    <script>
+        // 검색을 수행하는 함수
+        function search() {
+            var searchKeyword = document.getElementById('searchKeyword').value;
+            console.log('검색어:', searchKeyword);
+            // 여기에 검색 결과를 가져와서 리스트로 표시하는 로직을 추가하세요.
+            var resultContent = '검색 결과입니다: ' + searchKeyword;
+            document.getElementById('searchResult').innerHTML = resultContent;
+        }
+        
+        // 검색 결과 리스트에 클릭 이벤트를 등록하는 함수
+        
+    </script>
+</body>
+</html>

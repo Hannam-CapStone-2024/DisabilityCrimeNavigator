@@ -43,27 +43,25 @@ nav ul li {
 
 /* 맵 컨테이너 스타일 */
 .map-container {
-  width: 100%;
-  position: relative; /* 상대적 위치 설정 */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 /* 지도 스타일 */
 #map_div {
-  width: 100%;
-  height: 70vh; /* 화면 세로 높이의 70% */
+  width: 70%; /* 맵의 너비 조정 */
+  height: 70vh;
 }
 
 /* 검색 컨테이너 스타일 */
 .search-container {
-  width: 50%;
-  display: flex; /* 검색창과 검색 버튼을 가로로 배치하기 위해 */
-  align-items: center; /* 세로 중앙 정렬 */
-  justify-content: center; /* 가로 중앙 정렬 */
-  margin-top: 10px;
+  width: 10%; /* 검색창 컨테이너의 너비 조정 */
+  padding: 10px;
 }
-
 #searchKeyword {
-  width: calc(100% - 100px); /* 검색창의 너비를 조정하여 버튼을 포함한 전체 너비로 설정 */
+  width: calc(100% - 150px); /* 검색창의 너비를 조정하여 버튼을 포함한 전체 너비로 설정 */
   padding: 10px;
   border: none;
   border-top-right-radius: 0;
@@ -72,6 +70,7 @@ nav ul li {
   font-size: 16px;
 }
 
+/* 검색 버튼 스타일 수정 */
 #btn_select {
   width: 100px;
   padding: 10px;
@@ -83,84 +82,40 @@ nav ul li {
   font-size: 16px;
 }
 
-/* 검색 결과 컨테이너 스타일 */
-.result-container {
-  width: 30%;
-  padding-left: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-}
-/* 검색 결과 제목 스타일 */
-.title {
-  font-weight: bold;
-  font-size: 18px;
-  margin-bottom: 10px;
-  color: #333;
-}
-
- /* 검색 결과 목록 스타일 */
- .result-list {
-  border: 1px solid #ccc;
+/* 검색 결과 목록 스타일 수정 */
+.result-list {
+  width: calc(100% - 150px + 100px);; /* 검색 결과 리스트의 너비 조정 */
   padding: 10px;
-  max-height: 300px;
   overflow-y: auto;
-  border-radius: 10px;
-  width: 100%;
+  max-height: 70vh; /* 맵의 높이와 동일하게 설정 */
 }
 
-/* 검색 결과 아이템 스타일 */
+/* 검색 결과 아이템 스타일 수정 */
 .result-item {
-  padding: 5px;
+  list-style: none;
+  padding: 10px;
   border-bottom: 1px solid #ccc;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.result-item:hover {
+  background-color: #e0e0e0;
+}
+
+/* 검색 결과 제목 스타일 수정 */
+.title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 15px;
+  color: #333;
 }
 
 /* 검색창 및 버튼 컨테이너 스타일 */
 .search-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
+  width: 30%; /* 검색창 컨테이너의 너비 조정 */
+  padding: 10px;
 }
-/* 팝업 스타일 */
-.popup {
-  display: none;
-  position: absolute; /* fixed 대신 absolute로 변경 */
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  z-index: 999;
-  max-width: 80%; /* 팝업의 최대 너비 설정 */
-  max-height: 80%; /* 팝업의 최대 높이 설정 */
-  overflow: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 설정 */
-}
-
-/* 팝업 내용 스타일 수정 */
-.popup-content {
-  position: relative; /* absolute 대신 relative로 변경 */
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-  overflow-y: auto; /* 내용이 넘칠 경우 스크롤 가능하도록 설정 */
-  max-height: 80%; /* 팝업이 화면을 너무 많이 차지하지 않도록 최대 높이 설정 */
-}
-
-/* 닫기 버튼 스타일 */
-.popup button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 16px;
-  cursor: pointer;
-}
-
 
 /* 앱바 스타일 */
 .appbar {
