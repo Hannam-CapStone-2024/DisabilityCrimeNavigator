@@ -258,7 +258,9 @@ async function fetchData(str) {
             var marker = new Tmapv2.Marker({
                 position: lonlat,
                 map: map,
-                url: '/images   /marker_1.png',
+                icon: {
+                    url: 'https://gongu.copyright.or.kr/gongu/wrt/cmmn/wrtFileImageView.do?wrtSn=9046601&filePath=L2Rpc2sxL25ld2RhdGEvMjAxNC8yMS9DTFM2L2FzYWRhbFBob3RvXzI0MTRfMjAxNDA0MTY=&thumbAt=Y&thumbSe=b_tbumb&wrtTy=10004',
+                }
             });
 
             var circle = new Tmapv2.Circle({

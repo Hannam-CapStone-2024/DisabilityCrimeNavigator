@@ -1,6 +1,8 @@
 package cap.Manager;
 
+import cap.Class.Crime;
 import cap.Class.CrimeRecord;
+import cap.Class.TimeRange;
 import cap.Support.CrimeType;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -17,28 +19,88 @@ import java.util.Map;
 
 public class CriminalLoader {
 
+    public static Map<CrimeType, Integer> avgCount = new HashMap<>();
+
+
     public static List<CrimeRecord> Data() throws IOException {
-        var dataArray = convertJsonToCrimeRecords(readFileAsString("src/main/java/cap/DB/CrimeData.json"));
+        return convertJsonToCrimeRecords(readFileAsString("src/main/java/cap/DB/CrimeData.json"));
+    }
+
+    public static Map<CrimeType, CrimeRecord> Sum() throws IOException
+    {
+        var dataArray = Data();
         Map<CrimeType, CrimeRecord> crimeRecordMap = new HashMap<>();
         for (int i = 0; i < dataArray.size(); i++) {
             var it = dataArray.get(i);
+
             // 기존에 같은 범죄 유형의 기록이 있다면 Count를 누적, 없으면 새로운 CrimeRecord 생성
             if (crimeRecordMap.containsKey(it.category)) {
                 CrimeRecord existingRecord = crimeRecordMap.get(it.category);
-                existingRecord.night_20_24 += it.night_20_24;
-                existingRecord.earlyMorning_4_7 += it.earlyMorning_4_7;
-                existingRecord.midnight_0_4 += it.midnight_0_4;
-                existingRecord.year += it.year;
-                existingRecord.morning_7_12 += it.morning_7_12;
-                existingRecord.afternoon_12_18 += it.afternoon_12_18;
-                existingRecord.evening_18_20 += it.evening_18_20;
+                existingRecord.night_20_24 += it.night_20_24 / 2;
+                existingRecord.earlyMorning_4_7 += it.earlyMorning_4_7 / 2;
+                existingRecord.midnight_0_4 += it.midnight_0_4 / 2;
+                existingRecord.morning_7_12 += it.morning_7_12 / 2;
+                existingRecord.afternoon_12_18 += it.afternoon_12_18 / 2;
+                existingRecord.evening_18_20 += it.evening_18_20 / 2;
+
             } else {
                 crimeRecordMap.put(it.category, it);
             }
         }
-        return new ArrayList<>(crimeRecordMap.values());
+        return crimeRecordMap;
     }
 
+    public static Map<CrimeType, Integer> Avg() throws IOException
+    {
+        var dataArray = Data();
+        Map<CrimeType, Integer> crimeSumMap = new HashMap<>();
+
+        for (var it : dataArray) {
+            int total = (it.night_20_24 + it.earlyMorning_4_7 + it.midnight_0_4 +
+                    it.morning_7_12 + it.afternoon_12_18 + it.evening_18_20) / 6;
+            crimeSumMap.merge(it.category, total, Integer::sum);
+        }
+        return crimeSumMap;
+    }
+
+    public static int GetCount(CrimeType crimeType, TimeRange timeRange) {
+        List<CrimeRecord> crimeRecords;
+        try {
+            crimeRecords = Data(); // 데이터를 읽어옴
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+
+        // 주어진 범죄 유형과 시간대에 해당하는 범죄 발생 횟수를 계산
+        int count = 0;
+        for (CrimeRecord record : crimeRecords) {
+            if (record.category == crimeType) {
+                switch (timeRange) {
+                    case MIDNIGHT_0_4:
+                        count += record.midnight_0_4;
+                        break;
+                    case EARLY_MORNING_4_7:
+                        count += record.earlyMorning_4_7;
+                        break;
+                    case MORNING_7_12:
+                        count += record.morning_7_12;
+                        break;
+                    case AFTERNOON_12_18:
+                        count += record.afternoon_12_18;
+                        break;
+                    case EVENING_18_20:
+                        count += record.evening_18_20;
+                        break;
+                    case NIGHT_20_24:
+                        count += record.night_20_24;
+                        break;
+                }
+            }
+        }
+
+        return count;
+    }
 
 
     public static String readFileAsString(String filePath) throws IOException {
@@ -88,5 +150,24 @@ public class CriminalLoader {
 
     public static String translate(String koreanCrimeType) {
         return translationMap.getOrDefault(koreanCrimeType, "None");
+    }
+
+    private static void updateHighestCount(CrimeRecord record) {
+        // 현재 레코드의 각 시간대 값 중 가장 큰 값을 highestCount 맵에 업데이트
+        updateMaxCount(record.category, record.night_20_24);
+        updateMaxCount(record.category, record.earlyMorning_4_7);
+        updateMaxCount(record.category, record.midnight_0_4);
+        updateMaxCount(record.category, record.morning_7_12);
+        updateMaxCount(record.category, record.afternoon_12_18);
+        updateMaxCount(record.category, record.evening_18_20);
+    }
+
+    private static void updateMaxCount(CrimeType category, int value) {
+        if (avgCount.containsKey(category)) {
+            int currentMax = avgCount.get(category);
+            avgCount.put(category, Math.max(currentMax, value));
+        } else {
+            avgCount.put(category, value);
+        }
     }
 }

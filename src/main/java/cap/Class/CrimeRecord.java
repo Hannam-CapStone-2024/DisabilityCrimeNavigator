@@ -23,5 +23,16 @@ public class CrimeRecord {
         this.evening_18_20 = evening_18_20;
         this.category = category;
     }
+
+    public void printSum() {
+            System.out.println("밤(20시-24시): " + night_20_24);
+            System.out.println("새벽(4시-7시): " + earlyMorning_4_7);
+            System.out.println("심야(0시-4시): " +midnight_0_4);
+            System.out.println("연도: " + year);
+            System.out.println("오전(7시-12시): " + morning_7_12);
+            System.out.println("오후(12시-18시): " + afternoon_12_18);
+            System.out.println("저녁(18시-20시): " + evening_18_20);
+            System.out.println();
+    }
 }
 

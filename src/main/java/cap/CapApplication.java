@@ -1,10 +1,15 @@
 package cap;
 
+import cap.Class.*;
 import cap.Manager.CriminalLoader;
+import cap.Support.CrimeType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
+import java.util.Map;
+
+import static cap.Class.TimeRange.MIDNIGHT_0_4;
 
 @SpringBootApplication
 public class CapApplication {
@@ -17,11 +22,6 @@ public class CapApplication {
 
         //System.out.println("API 키: " + MapController.AllowURL(key));
         //System.out.println("범죄 : " + CrimeZoneController.GetInstance().GetCrimeZone("Sexual_Violence"));
-
-        for(var it : CriminalLoader.Data())
-        {
-            System.out.println(it.category + " :" + it.afternoon_12_18);
-        }
     }
 
 }
