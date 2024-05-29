@@ -4,7 +4,7 @@ import cap.Class.Crime;
 import cap.Class.CrimeRecord;
 import cap.Class.TimeRange;
 import cap.Support.CrimeType;
-import com.google.gson.JsonArray;
+    import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
