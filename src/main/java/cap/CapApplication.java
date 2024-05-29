@@ -2,6 +2,7 @@ package cap;
 
 import cap.Class.*;
 import cap.Manager.CriminalLoader;
+import cap.Support.Average;
 import cap.Support.CrimeType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +21,9 @@ public class CapApplication {
 
         SpringApplication.run(CapApplication.class, args);
 
-        //System.out.println("API 키: " + MapController.AllowURL(key));
+        System.out.println("API 키: " + Crime.EachState(CrimeType.Theft,TimeRange.MIDNIGHT_0_4, WeekType.Mon));
+        System.out.println("API 키: " + Crime.EachState(CrimeType.Theft,TimeRange.NIGHT_20_24, WeekType.Fri));
+        System.out.println("API 키: " + Crime.EachState(CrimeType.Theft,TimeRange.EVENING_18_20, WeekType.Sat));
         //System.out.println("범죄 : " + CrimeZoneController.GetInstance().GetCrimeZone("Sexual_Violence"));
     }
 

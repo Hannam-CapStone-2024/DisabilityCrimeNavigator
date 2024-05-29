@@ -1,6 +1,7 @@
 package cap.Class;
 
 import cap.Manager.CriminalLoader;
+import cap.Support.Average;
 import cap.Support.CrimeType;
 
 import java.io.IOException;
@@ -65,29 +66,14 @@ public class Crime
         System.out.println("avgCount: " + avgCount);
         System.out.println("-----------");
         // 시간대에 따른 범죄 발생을 확인하여 범죄 상태를 반환
-        switch (time) {
-            case MIDNIGHT_0_4:
-                return calculateCrimeState(avgCount);
-            case EARLY_MORNING_4_7:
-                return calculateCrimeState(avgCount);
-            case MORNING_7_12:
-                return calculateCrimeState(avgCount);
-            case AFTERNOON_12_18:
-                return calculateCrimeState(avgCount);
-            case EVENING_18_20:
-                return calculateCrimeState(avgCount);
-            case NIGHT_20_24:
-                return calculateCrimeState(avgCount);
-            default:
-                return CrimeState.LOW; // 기본적으로는 LOW 상태 반환
-        }
+        return calculateCrimeState(avgCount * new Average().get(crimeType,weekType));
     }
 
 
     private static CrimeState calculateCrimeState(double avgCount) {
         if (avgCount <= 0.7) {
             return CrimeState.LOW;
-        } else if (avgCount <= 1.5) {
+        } else if (avgCount <= 1.3) {
             return CrimeState.MIDDLE;
         } else {
             return CrimeState.HIGH;
